@@ -32,7 +32,7 @@ cid_file=$($MKTEMP_EXEC -u)
 s2i_args="--pull-policy=never --loglevel=2"
 
 # Port the image exposes service to be tested
-test_port=8080
+test_port=8086
 
 image_exists() {
   docker inspect $1 &>/dev/null
@@ -51,7 +51,7 @@ container_port() {
 }
 
 run_s2i_build() {
-  s2i build --incremental=true ${s2i_args} ${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+  s2i build --incremental=true ${s2i_args} ${test_dir}/test-project ${IMAGE_NAME} ${IMAGE_NAME}-testproject -e CMD=api
 }
 
 prepare() {
@@ -60,7 +60,7 @@ prepare() {
     exit 1
   fi
   # s2i build requires the application is a valid 'Git' repository
-  pushd ${test_dir}/test-app >/dev/null
+  pushd ${test_dir}/test-project >/dev/null
   git init
   git config user.email "build@localhost" && git config user.name "builder"
   git add -A && git commit -m "Sample commit"
@@ -69,7 +69,7 @@ prepare() {
 }
 
 run_test_application() {
-  docker run --rm --cidfile=${cid_file} -p ${test_port}:${test_port} ${IMAGE_NAME}-testapp
+  docker run --rm --cidfile=${cid_file} -p ${test_port}:${test_port} ${IMAGE_NAME}-testproject
 }
 
 cleanup() {
