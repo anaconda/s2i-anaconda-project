@@ -1,0 +1,31 @@
+#!/bin/bash -e
+#
+# S2I assemble script for the 'anaconda-project-centos7' image.
+# The 'assemble' script builds your application source so that it is ready to run.
+#
+# For more information refer to the documentation:
+#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
+#
+
+# If the 'anaconda-project-centos7' assemble script is executed with the '-h' flag, print the usage.
+if [[ "$1" == "-h" ]]; then
+	exec /usr/libexec/s2i/usage
+fi
+
+# Restore artifacts from the previous build (if they exist).
+#
+if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
+  echo "---> Restoring build artifacts..."
+  shopt -s dotglob
+  mv /tmp/artifacts/* ./
+  shopt -u dotglob
+fi
+
+echo "---> Copying project..."
+cp -Rf /tmp/src/. ./
+
+echo "---> Preparing environments..."
+# TODO: Add build steps for your application, eg npm install, bundle install, pip install, etc.
+anaconda-project clean ## maybe not necessary?
+anaconda-project --verbose prepare --all
+conda clean --all --yes

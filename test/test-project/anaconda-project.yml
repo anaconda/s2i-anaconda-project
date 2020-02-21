@@ -1,0 +1,14 @@
+name: TestProject
+
+packages:
+  - python=3.7
+  - tranquilizer
+  - werkzeug<1
+channels:
+  - defaults
+  - conda-forge
+
+commands:
+  api:
+    unix: tranquilizer temperature.py
+    supports_http_options: True
