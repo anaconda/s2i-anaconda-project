@@ -29,7 +29,7 @@ RUN yum install -y bzip2 && \
     conda install anaconda-project=0.8.4 --yes && \
     conda clean --all --yes && \
     rm -f condarc miniconda.sh && \
-    useradd anaconda
+    chmod -R 755 /opt/conda
 
 # TODO (optional): Copy the builder files into /opt/app-root
 # COPY ./<builder_folder>/ /opt/app-root/
@@ -40,7 +40,6 @@ COPY ./s2i/bin/ /usr/libexec/s2i
 
 # TODO: Drop the root user and make the content of /opt/app-root owned by user 1001
 RUN chown -R 1001:1001 /opt/app-root
-RUN chown -R 1001:1001 /opt/conda
 
 # This default user is created in the openshift/base-centos7 image
 USER 1001
