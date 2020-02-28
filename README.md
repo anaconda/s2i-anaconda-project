@@ -15,7 +15,7 @@ make
 3. Build your own docker image from an Anaconda Project directory
 
 ```
-s2i build <path-to-project or URL> anaconda-project-centos7 <image-name> -e CMD=<project-command>
+s2i build <path-to-project or URL> anaconda-project-ubi7 <image-name> -e CMD=<project-command>
 ```
 
 * `<image-name>` is the desired Docker image name.
