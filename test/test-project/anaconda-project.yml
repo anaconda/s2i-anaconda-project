@@ -9,6 +9,11 @@ channels:
   - conda-forge
 
 commands:
-  api:
+  temp-api:
+    # the default command
     unix: tranquilizer temperature.py
     supports_http_options: True
+  server:
+    # this command listed first by list-commands
+    unix: python -m http.server {{ '%s' % port if port is defined }}
+    supports_http_options: False

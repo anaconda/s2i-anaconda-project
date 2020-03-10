@@ -26,7 +26,7 @@ RUN yum install -y bzip2 && \
     bash miniconda.sh -b -p /opt/conda && \
     conda config --set auto_update_conda False --set notify_outdated_conda false --system && \
     cp condarc /opt/conda/.condarc && \
-    conda install anaconda-project=0.8.4 --yes && \
+    conda install -c defusco anaconda-project=0.8.4+59 --yes && \
     conda clean --all --yes && \
     rm -f condarc miniconda.sh && \
     chmod -R 755 /opt/conda
