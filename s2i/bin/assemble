@@ -24,8 +24,6 @@ fi
 echo "---> Copying project..."
 cp -Rf /tmp/src/. ./
 
-echo "---> Preparing environments..."
-# TODO: Add build steps for your application, eg npm install, bundle install, pip install, etc.
-anaconda-project clean ## maybe not necessary?
-anaconda-project --verbose prepare --all
+echo "---> Preparing environment for command $CMD..."
+anaconda-project --verbose prepare --command $CMD
 conda clean --all --yes
