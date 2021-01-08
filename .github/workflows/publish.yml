@@ -22,6 +22,6 @@ jobs:
       - name: Push to Docker Hub (${{ matrix.base }})
         run: |
           docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
-          docker tag conda/s2i-anaconda-project-${{ matrix.base }}:latest conda/s2i-anaconda-project-${{ matrix.base }}:${{ GITHUB_REF }}
+          docker tag conda/s2i-anaconda-project-${{ matrix.base }}:latest conda/s2i-anaconda-project-${{ matrix.base }}:${{ github.event.ref }}
           docker push conda/s2i-anaconda-project-%{{ matrix.base }}:latest
-          docker push conda/s2i-anaconda-project-%{{ matrix.base }}:${{ GITHUB_REF }}
+          docker push conda/s2i-anaconda-project-%{{ matrix.base }}:${{ github.event.ref }}
