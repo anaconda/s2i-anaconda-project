@@ -9,7 +9,7 @@ on:
     branches:
       - master
 jobs:
-  test:
+  prepare:
     runs-on: ubuntu-latest
     steps:
     - name: Retrieve the source code
@@ -18,9 +18,17 @@ jobs:
         fetch-depth: 0
     - name: Install s2i
       run: conda install -c defusco source-to-image
-    - name: Build images
+  test:
+    runs-on: ubuntu-latest
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        base: [ubi7, centos7]
+    steps:
+    - name: Builder image (${{ matrix.base }})
       run: |
-        make
+        make ${{ matrix.base }}
         docker image ls
-    - name: Test images
-      run: PATH=/usr/share/miniconda/bin:$PATH make test
+    - name: Test builder image (${{ matrix.base }})
+      run: PATH=/usr/share/miniconda/bin:$PATH make test-${{ matrix.base }}
