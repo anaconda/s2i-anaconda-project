@@ -19,6 +19,8 @@ jobs:
     - name: Install s2i
       run: conda install -c defusco source-to-image
     - name: Build images
-      run: make
+      run: |
+        make
+        docker image ls
     - name: Test images
-      run: make test
+      run: PATH=/usr/share/miniconda/bin:$PATH make test
