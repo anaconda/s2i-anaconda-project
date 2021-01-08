@@ -5,7 +5,7 @@ Build docker images from Anaconda Project directories.
 ## Usage
 
 1. Install [source-to-image](https://github.com/openshift/source-to-image#installation)
-2. Clone this repo and build
+2. Optional: Clone this repo and build the base images
 ```
 git clone https://github.com/Anaconda-Platform/s2i-anaconda-project
 cd s2i-anaconda-project
@@ -15,7 +15,7 @@ make
 3. Build your own docker image from an Anaconda Project directory
 
 ```
-s2i build <path-to-project or URL> anaconda-project-ubi7 <image-name> -e CMD=<project-command>
+s2i build <path-to-project or URL> conda/s2i-anaconda-project-ubi7 <image-name> -e CMD=<project-command>
 ```
 
 * `<image-name>` is the desired Docker image name.
@@ -33,7 +33,7 @@ Here is an example using the [Hello World](https://github.com/AlbertDeFusco/hell
 
 
 ```
->s2i build https://github.com/AlbertDeFusco/hello-world.git anaconda-project-ubi7 hello-world -e CMD=default
+>s2i build https://github.com/AlbertDeFusco/hello-world.git conda/s2i-anaconda-project-ubi7 hello-world -e CMD=default
 error: Unable to load docker config: json: cannot unmarshal string into Go value of type docker.dockerConfig
 ---> Copying project...
 ---> Preparing environments...
@@ -77,8 +77,8 @@ You can find the `hello-world` Docker image in your local registry.
 >docker image ls
 REPOSITORY                                       TAG                 IMAGE ID            CREATED             SIZE
 hello-world                                      latest              eeb7153e78d3        35 seconds ago      1.96GB
-anaconda-project-ubi7                            latest              c3b1890888f8        2 minutes ago       809MB
-anaconda-project-centos7                         latest              2f6ce578489b        3 minutes ago       796MB
+conda/anaconda-project-ubi7                      latest              c3b1890888f8        2 minutes ago       809MB
+conda/anaconda-project-centos7                   latest              2f6ce578489b        3 minutes ago       796MB
 registry.access.redhat.com/ubi7/s2i-base         latest              7fe1e99b3821        7 weeks ago         471MB
 centos                                           7                   5e35e350aded        5 months ago        203MB
 openshift/base-centos7                           latest              4842f0bd3d61        3 years ago         383MB
