@@ -1,0 +1,24 @@
+name: Build and test
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Retrieve the source code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Install s2i
+      run: conda install -c defusco source-to-image
+    - name: Build images
+      run: make
+    - name: Test images
+      run: make test

@@ -1,4 +1,4 @@
-IMAGE_PREFIX = anaconda-project
+IMAGE_PREFIX = conda/s2i-anaconda-project
 BASE_IMAGES := $(basename $(wildcard *.dockerfile))
 
 all: $(BASE_IMAGES)
@@ -8,6 +8,7 @@ $(BASE_IMAGES):
 	docker build -t $(IMAGE_PREFIX)-$@ -f $@.dockerfile .
 
 TEST_IMAGES := $(patsubst %,test-%,$(BASE_IMAGES))
+test: $(TEST_IMAGES)
 
 .PHONY: $(TEST_IMAGES)
 $(TEST_IMAGES):
