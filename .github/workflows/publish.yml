@@ -20,9 +20,8 @@ jobs:
           make ${{ matrix.base }}
           docker image ls
       - name: Push to Docker Hub (${{ matrix.base }})
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: conda/s2i-anaconda-project-${{ matrix.base }}
-          tag_names: true
+        run: |
+          docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
+          docker tag conda/s2i-anaconda-project-${{ matrix.base }}:latest conda/s2i-anaconda-project-${{ matrix.base }}:${{ GITHUB_REF }}
+          docker push conda/s2i-anaconda-project-%{{ matrix.base }}:latest
+          docker push conda/s2i-anaconda-project-%{{ matrix.base }}:${{ GITHUB_REF }}
