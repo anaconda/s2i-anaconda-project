@@ -9,7 +9,7 @@
 
 # If the 'anaconda-project-centos7' assemble script is executed with the '-h' flag, print the usage.
 if [[ "$1" == "-h" ]]; then
-	exec /usr/libexec/s2i/usage
+  exec /usr/libexec/s2i/usage
 fi
 
 # Restore artifacts from the previous build (if they exist).
@@ -19,6 +19,12 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
   shopt -s dotglob
   mv /tmp/artifacts/* ./
   shopt -u dotglob
+fi
+
+if [[ "$CONDA_TOKEN" ]]; then
+  echo "---> Authenticating to repo.anaconda.cloud..."
+  conda token set $CONDA_TOKEN
+  cat .condarc
 fi
 
 echo "---> Copying project..."
