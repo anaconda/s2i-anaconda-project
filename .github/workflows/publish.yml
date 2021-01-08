@@ -21,7 +21,7 @@ jobs:
           docker image ls
       - name: Push to Docker Hub (${{ matrix.base }})
         run: |
-          GIT_TAG=`echo $(git describe --tags --abbrev=0)`
+          GIT_TAG=`git describe --tags --abbrev=0`
           docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
           docker tag conda/s2i-anaconda-project-${{ matrix.base }}:latest conda/s2i-anaconda-project-${{ matrix.base }}:$GIT_TAG
           docker push conda/s2i-anaconda-project-%{{ matrix.base }}:latest
