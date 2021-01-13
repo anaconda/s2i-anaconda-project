@@ -31,5 +31,6 @@ echo "---> Copying project..."
 cp -Rf /tmp/src/. ./
 
 echo "---> Preparing environment for command $CMD..."
+anaconda-project clean
 anaconda-project --verbose prepare --command $CMD
 conda clean --all --yes
