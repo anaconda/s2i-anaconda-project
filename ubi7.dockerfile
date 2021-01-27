@@ -15,16 +15,14 @@ ENV LANG=en_US.UTF-8 \
     PATH=/opt/conda/bin:$PATH 
 
 ### Install and configure miniconda
-ADD https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.sh miniconda.sh
-RUN yum install -y bzip2 && \
-    bash miniconda.sh -u -b -p /opt/conda && \
-    rm -f miniconda.sh && \
-    chmod -R 755 /opt/conda
 COPY ./etc/condarc /opt/conda/.condarc
-
-### Add required packages
-RUN conda install anaconda-project=0.8.4 anaconda-client conda-repo-cli conda-token --yes && \
-    conda clean --all --yes
+RUN yum install -y wget bzip2 \
+    && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.sh -O miniconda.sh \
+    && bash miniconda.sh -u -b -p /opt/conda \
+    && conda install anaconda-project=0.8.4 anaconda-client conda-repo-cli conda-token tini --yes \
+    && conda clean --all --yes \
+    && rm -f miniconda.sh \
+    && chmod -R 755 /opt/conda
 
 COPY ./s2i/bin/ /usr/libexec/s2i
 
@@ -40,5 +38,7 @@ USER 1001
 ## access to the repo in the base image.
 
 EXPOSE 8086
+
+ENTRYPOINT ["tini", "-g", "--"]
 
 CMD ["/usr/libexec/s2i/usage"]
