@@ -27,7 +27,6 @@ RUN apk add --no-cache --virtual wget tar bash \
     && conda install anaconda-project=0.8.4 anaconda-client conda-repo-cli conda-token tini --yes \
     && conda clean --all --yes \
     && chmod -R 755 /opt/conda 
-### && find /opt/conda -follow -type f \( -iname '*.a' -o -iname '*.pyc' -o -iname '*.js.map' \) -delete
 
 COPY ./s2i/bin/ /usr/libexec/s2i
 

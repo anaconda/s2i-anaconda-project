@@ -33,4 +33,8 @@ cp -Rf /tmp/src/. ./
 echo "---> Preparing environment for command $CMD..."
 anaconda-project clean
 anaconda-project --verbose prepare --command $CMD
-conda clean --all --yes
+conda clean -f --all --yes
+find ./envs/default -follow -type f -name '*.a' -delete
+find ./envs/default -follow -type f -name '*.pyc' -delete
+find ./envs/default -follow -type f -name '*.js.map' -delete
+find ./envs/default/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete
