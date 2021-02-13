@@ -14,14 +14,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        base: [ubi7, centos7]
+        base: [ubi7, ubi8, centos7]
     steps:
     - name: Retrieve the source code
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
     - name: Install s2i
-      run: conda install -c defusco source-to-image
+      run: conda install -c ctools source-to-image
     - name: Builder image (${{ matrix.base }})
       run: |
         make ${{ matrix.base }}
