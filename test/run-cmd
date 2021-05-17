@@ -118,8 +118,8 @@ test_connection() {
   local attempt=1
   local result=1
   while [ $attempt -le $max_attempts ]; do
-    echo "Sending GET request to http://$(container_ip):$(container_port)/"
-    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):$(container_port)/)
+    echo "Sending GET request to http://$(container_ip):$(container_port)/temperature.py"
+    response_code=$(curl -s -w %{http_code} -o /dev/null http://$(container_ip):$(container_port)/temperature.py)
     status=$?
     if [ $status -eq 0 ]; then
       if [ $response_code -eq 200 ]; then

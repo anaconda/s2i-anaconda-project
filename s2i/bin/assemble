@@ -7,7 +7,9 @@
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 
-# If the 'anaconda-project-centos7' assemble script is executed with the '-h' flag, print the usage.
+project_command=${CMD:-default}
+
+# If the assemble script is executed with the '-h' flag, print the usage.
 if [[ "$1" == "-h" ]]; then
   exec /usr/libexec/s2i/usage
 fi
@@ -30,7 +32,7 @@ fi
 echo "---> Copying project..."
 cp -Rf /tmp/src/. ./
 
-echo "---> Preparing environment for command $CMD..."
+echo "---> Preparing environment for command ${project_command}..."
 anaconda-project clean
-anaconda-project --verbose prepare --command $CMD
+anaconda-project --verbose prepare --command ${project_command}
 conda clean --all --yes
