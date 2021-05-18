@@ -1,0 +1,20 @@
+name: MultiEnv
+description: test multiple env_specs
+
+env_specs:
+  py3:
+    packages:
+      - python=3.8
+  py2:
+    packages:
+      - python=2.7
+
+commands:
+  py3:
+    unix: python -c "import sys,os;print(os.path.basename(sys.prefix))"
+    env_spec: py3
+    supports_http_options: false
+  py2:
+    unix: python -c "import sys,os;print(os.path.basename(sys.prefix))"
+    env_spec: py2
+    supports_http_options: false

@@ -3,10 +3,10 @@ FROM registry.access.redhat.com/ubi8/s2i-base
 LABEL maintainer="Anaconda, Inc."
 
 ENV CONDA_VERSION=4.9.2
-ENV ANACONDA_PROJECT_VERSION=0.8.4
+ENV ANACONDA_PROJECT_VERSION=0.10.0
 
 LABEL io.k8s.description="Run Anaconda Project commands" \
-      io.k8s.display-name="Anaconda Project 0.8.4" \
+      io.k8s.display-name="Anaconda Project 0.10.0" \
       io.openshift.expose-services="8086:http" \
       io.openshift.tags="builder,anaconda-project,conda" 
 
@@ -19,7 +19,7 @@ COPY ./etc/condarc /opt/conda/.condarc
 RUN yum install -y wget bzip2 \
     && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.sh -O miniconda.sh \
     && bash miniconda.sh -u -b -p /opt/conda \
-    && conda install anaconda-project=0.8.4 anaconda-client conda-repo-cli conda-token tini --yes \
+    && conda install anaconda-project=0.10.0 anaconda-client conda-repo-cli conda-token tini --yes \
     && conda clean --all --yes \
     && rm -f miniconda.sh \
     && chmod -R 755 /opt/conda

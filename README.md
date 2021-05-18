@@ -15,11 +15,11 @@ make
 3. Build your own docker image from an Anaconda Project directory
 
 ```
-s2i build <path-to-project or URL> conda/s2i-anaconda-project-ubi7 <image-name> -e CMD=<project-command>
+s2i build <path-to-project or URL> conda/s2i-anaconda-project-ubi7 <image-name> [-e CMD=<project-command>]
 ```
 
 * `<image-name>` is the desired Docker image name.
-* `<project-command>` is the anaconda-project command to run when `docker run` is executed.
+* `<project-command>` is the anaconda-project command to run when `docker run` is executed (optional).
 
 4. Run the docker image
 ```
@@ -33,7 +33,7 @@ Here is an example using the [Hello World](https://github.com/AlbertDeFusco/hell
 
 
 ```
->s2i build https://github.com/AlbertDeFusco/hello-world.git conda/s2i-anaconda-project-ubi7 hello-world -e CMD=default
+>s2i build https://github.com/AlbertDeFusco/hello-world.git conda/s2i-anaconda-project-ubi7 hello-world
 error: Unable to load docker config: json: cannot unmarshal string into Go value of type docker.dockerConfig
 ---> Copying project...
 ---> Preparing environments...
