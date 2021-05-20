@@ -8,7 +8,7 @@
 #
 
 function find_js {
-  find ./envs/*/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' 2>/dev/null
+  find ./envs/*/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' 2>/dev/null 1>/dev/null
   return $?
 }
 
