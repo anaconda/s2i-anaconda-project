@@ -16,8 +16,14 @@ ENV LC_ALL=en_US.UTF-8
 ENV PATH=/opt/conda/bin:$PATH 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV HOME=/opt/app-root/src
+ENV TZ=US/Central
 
 COPY ./etc/condarc /opt/conda/.condarc
+
+### Set timezone
+RUN apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
+    && echo ${TZ} > /etc/timezone
 
 ### Install and configure miniconda
 RUN apk add --no-cache --virtual wget tar bash \

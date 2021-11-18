@@ -39,7 +39,7 @@ cp -Rf /tmp/src/. ./
 
 echo "---> Preparing environment for command ${project_command}..."
 anaconda-project clean
-anaconda-project --verbose prepare --command ${project_command}
+anaconda-project --verbose prepare --mode production_defaults --command ${project_command}
 conda clean --all --yes
 find ./envs/* -follow -type f -name '*.a' -delete
 find ./envs/* -follow -type f -name '*.pyc' -delete
