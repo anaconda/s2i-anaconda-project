@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        base: [ubi7, ubi8]
+        base: [ubi7, ubi8, alpine]
     steps:
     - name: Retrieve the source code
       uses: actions/checkout@v2
