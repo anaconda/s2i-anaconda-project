@@ -48,5 +48,4 @@ if find_js; then
   find ./envs/*/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete
 fi
 
-env_spec=$(python -c "from anaconda_project.project import Project;print(Project('.').command_for_name('${project_command}').default_env_spec_name)")
-sed -i "s:conda activate base:conda activate ./envs/${env_spec}:" ~/.bashrc
+touch .assembled

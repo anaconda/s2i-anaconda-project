@@ -21,8 +21,6 @@ RUN yum install -y wget bzip2 \
     && bash miniconda.sh -u -b -p /opt/conda \
     && rm -f miniconda.sh \
     && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
-    && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
-    && echo "conda activate base" >> ~/.bashrc \
     && conda install anaconda-project=0.10.0 anaconda-client conda-repo-cli conda-token tini --yes \
     && conda clean --all --yes \
     && chmod -R 755 /opt/conda
@@ -42,6 +40,6 @@ USER 1001
 
 EXPOSE 8086
 
-ENTRYPOINT ["tini", "-g", "--"]
+ENTRYPOINT ["/usr/libexec/s2i/entrypoint.sh"]
 
 CMD ["/usr/libexec/s2i/usage"]
