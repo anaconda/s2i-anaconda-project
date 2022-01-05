@@ -26,7 +26,7 @@ RUN apk add --no-cache tzdata \
     && echo ${TZ} > /etc/timezone
 
 ### Install and configure miniconda
-RUN apk add --no-cache --virtual wget tar bash \
+RUN apk add --no-cache --virtual wget tar bash curl \
     && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.sh -O miniconda.sh \
     && sh miniconda.sh -u -b -p /opt/conda \
     && rm -f miniconda.sh \
