@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [ -e /opt/app-root/src/.assembled ]; then
     if [[ $1 == "/usr/libexec/s2i/run" ]]; then
         if [ -v AWS_LAMBDA_RUNTIME_API ]; then
