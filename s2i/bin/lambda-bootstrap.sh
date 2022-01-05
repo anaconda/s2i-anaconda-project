@@ -38,22 +38,6 @@ sendResponse () {
   cat $REQUEST_RESPONSE_FILE | curl -sS -X POST -d @- "http://${AWS_LAMBDA_RUNTIME_API}/${RUNTIME_PATH}/invocation/${REQUEST_ID}/response" > /dev/null
 }
 
-# # Make sure handler file exists
-# if [[ ! -f $LAMBDA_TASK_ROOT/"$(echo $_HANDLER | cut -d. -f1).sh" ]]; then
-#   sendInitError "Failed to load handler '$(echo $_HANDLER | cut -d. -f2)' from module '$(echo $_HANDLER | cut -d. -f1)'. File '$(echo $_HANDLER | cut -d. -f1).sh' does not exist." "InvalidHandlerException"
-#   exit 1
-# fi
-# 
-# # Initialization
-# SOURCE_RESPONSE="$(mktemp)"
-# source $LAMBDA_TASK_ROOT/"$(echo $_HANDLER | cut -d. -f1).sh" > $SOURCE_RESPONSE 2>&1
-# if [[ $? -eq "0" ]]; then
-#   rm -f -- "$SOURCE_RESPONSE"
-# else
-#   sendInitError "Failed to source file '$(echo $_HANDLER | cut -d. -f1).sh'. $(cat $SOURCE_RESPONSE)" "InvalidHandlerException"
-#   exit 1
-# fi
-# 
 # # Make sure handler function exists
 # type "$(echo $_HANDLER | cut -d. -f2)" > /dev/null 2>&1
 # if [[ ! $? -eq "0" ]]; then
@@ -65,9 +49,9 @@ sendResponse () {
 while true
 do
   HEADERS="/tmp/headers-$(date +'%s')"
-  RESPONSE="/tmp/response-$(date +'%s')"
+  RESPONSE_FILE="/tmp/response-$(date +'%s')"
   touch $HEADERS
-  touch $RESPONSE
+  touch $RESPONSE_FILE
   EVENT_DATA=$(curl -sS -LD "$HEADERS" -X GET "http://${AWS_LAMBDA_RUNTIME_API}/${RUNTIME_PATH}/invocation/next")
   REQUEST_ID=$(grep -Fi Lambda-Runtime-Aws-Request-Id "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)
   # Export some additional context
@@ -76,19 +60,19 @@ do
   export AWS_LAMBDA_FUNCTION_ARN=$(grep -Fi Lambda-Runtime-Invoked-Function-Arn "$HEADERS" | cut -d" " -f2)
   export AWS_LAMBDA_TRACE_ID=$(grep -Fi Lambda-Runtime-Trace-Id "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)
   # Execute the command
-  anaconda-project run $COMMAND "$EVENT_DATA" >&1 2> $RESPONSE | cat
+  anaconda-project run $COMMAND "$EVENT_DATA" &> $RESPONSE_FILE
   EXIT_CODE=$?
   # Respond to Lambda API
   if [[ $EXIT_CODE -eq "0" ]]; then
-    sendResponse "$REQUEST_ID" "$RESPONSE"
+    sendResponse "$REQUEST_ID" "$RESPONSE_FILE"
   else
     # Log error to stdout as well
-    cat $RESPONSE
-    sendRuntimeError "$REQUEST_ID" "Exited with code $EXIT_CODE" "RuntimeErrorException" "$(cat $RESPONSE)"
+    cat $RESPONSE_FILE
+    sendRuntimeError "$REQUEST_ID" "Exited with code $EXIT_CODE" "RuntimeErrorException" "$(cat $RESPONSE_FILE)"
   fi
   # Clean up
   rm -f -- "$HEADERS"
-  rm -f -- "$RESPONSE"
+  rm -f -- "$RESPONSE_FILE"
   unset HEADERS
   unset RESPONSE
 done
