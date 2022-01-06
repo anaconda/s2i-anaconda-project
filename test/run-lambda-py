@@ -50,7 +50,7 @@ container_port() {
 }
 
 run_s2i_build() {
-  s2i build --incremental=true ${s2i_args} ${test_dir}/test-lambda ${IMAGE_NAME} ${IMAGE_NAME}-testproject
+  s2i build --incremental=true ${s2i_args} ${test_dir}/test-lambda-py ${IMAGE_NAME} ${IMAGE_NAME}-testproject
 }
 
 prepare() {
@@ -59,7 +59,7 @@ prepare() {
     exit 1
   fi
   # s2i build requires the application is a valid 'Git' repository
-  pushd ${test_dir}/test-lambda >/dev/null
+  pushd ${test_dir}/test-lambda-py >/dev/null
   git init
   git config user.email "build@localhost" && git config user.name "builder"
   git add -A && git commit -m "Sample commit"
@@ -117,11 +117,12 @@ test_connection() {
   local result=1
   while [ $attempt -le $max_attempts ]; do
     echo "Sending POST request to http://$(container_ip):$(container_port)/2015-03-31/functions/function/invocations -d '{\"Key\":\"input\"}'"
-    response_code=$(curl -XPOST -s -w %{http_code} -o response.json http://$(container_ip):$(container_port)/2015-03-31/functions/function/invocations -d '{"Key":"input"}')
+    response_code=$(curl -XPOST -s -w %{http_code} -o /tmp/response.json http://$(container_ip):$(container_port)/2015-03-31/functions/function/invocations -d '{"Key":"input"}')
     status=$?
     if [ $status -eq 0 ]; then
       if [ $response_code -eq 200 ]; then
-        test_response=$(jq '.Key == "outputs"' response.json | grep -q true)
+        grep -q '{"Key": "output"}' /tmp/response.json
+        test_response=$?
         if [ $test_response -eq 0 ]; then
           result=0
         fi

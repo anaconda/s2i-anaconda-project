@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ARGS=${@:-"/usr/libexec/s2i/run"}
-echo $ARGS
 
 if [ -e /opt/app-root/src/.assembled ]; then
     if [[ $ARGS == "/usr/libexec/s2i/run" ]]; then
@@ -18,5 +17,5 @@ if [ -e /opt/app-root/src/.assembled ]; then
         fi
     fi
 else
-    exec "$@"
+    exec "$ARGS"
 fi
