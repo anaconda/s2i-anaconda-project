@@ -12,7 +12,14 @@ LABEL io.k8s.description="Run Anaconda Project commands" \
 
 ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
-    PATH=/opt/conda/bin:$PATH 
+    PATH=/opt/conda/bin:$PATH
+ENV PIP_CACHE_DIR=/opt/pip
+
+COPY ./entrypoints/ /
+
+### AWS Lambda Runtime Emulator
+ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /opt/aws/
+RUN chmod +x /opt/aws/aws-lambda-rie
 
 ### Install and configure miniconda
 COPY ./etc/condarc /opt/conda/.condarc
@@ -23,7 +30,8 @@ RUN yum install -y wget bzip2 \
     && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
     && conda install anaconda-project=0.10.0 anaconda-client conda-repo-cli conda-token tini --yes \
     && conda clean --all --yes \
-    && chmod -R 755 /opt/conda
+    && chmod -R 755 /opt/conda \
+    && mkdir ${PIP_CACHE_DIR} && chmod -R 755 ${PIP_CACHE_DIR}
 
 COPY ./s2i/bin/ /usr/libexec/s2i
 
@@ -40,6 +48,6 @@ USER 1001
 
 EXPOSE 8086
 
-ENTRYPOINT ["/usr/libexec/s2i/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["/usr/libexec/s2i/usage"]
