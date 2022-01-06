@@ -17,13 +17,7 @@ ENV PATH=/opt/conda/bin:$PATH
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV HOME=/opt/app-root/src
 ENV TZ=US/Central
-ENV PIP_CACHE_DIR=/opt/pip
-
-COPY ./entrypoints/ /
-
-### AWS Lambda Runtime Emulator
-ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /opt/aws/
-RUN chmod +x /opt/aws/aws-lambda-rie
+ENV PIP_NO_CACHE_DIR=1
 
 ### Set timezone
 RUN apk add --no-cache tzdata \
@@ -39,9 +33,13 @@ RUN apk add --no-cache --virtual wget tar bash curl \
     && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
     && conda install anaconda-project=0.10.0 anaconda-client conda-repo-cli conda-token tini --yes \
     && conda clean --all --yes \
-    && chmod -R 755 /opt/conda \
-    && mkdir ${PIP_CACHE_DIR} && chmod -R 755 ${PIP_CACHE_DIR}
+    && chmod -R 755 /opt/conda
 
+### AWS Lambda Runtime Emulator
+ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /opt/aws/
+RUN chmod +x /opt/aws/aws-lambda-rie
+
+COPY ./entrypoints/ /
 COPY ./s2i/bin/ /usr/libexec/s2i
 
 RUN mkdir -p /opt/app-root && \
