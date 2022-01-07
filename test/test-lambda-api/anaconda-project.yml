@@ -1,0 +1,8 @@
+name: test-lambda
+
+packages:
+  - jq
+
+commands:
+  default:
+    unix: jq '.Key = "output"'

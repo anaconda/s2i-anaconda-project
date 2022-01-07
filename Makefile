@@ -21,3 +21,4 @@ $(TEST_IMAGES):
 	IMAGE_NAME=$(IMAGE_PREFIX)-$(patsubst test-%,%,$@)-candidate test/run-env-vars "" "CMD_VAR=cmd_value\nPROJECT_VAR=project_value\n"
 	IMAGE_NAME=$(IMAGE_PREFIX)-$(patsubst test-%,%,$@)-candidate test/run-env-vars "env" "PROJECT_VAR=project_value"
 	IMAGE_NAME=$(IMAGE_PREFIX)-$(patsubst test-%,%,$@)-candidate test/run-lambda-py
+	IMAGE_NAME=$(IMAGE_PREFIX)-$(patsubst test-%,%,$@)-candidate test/run-lambda-api
