@@ -5,4 +5,4 @@ packages:
 
 commands:
   default:
-    unix: jq '.Key = "output"'
+    unix: jq -cM '.Key = "output"' <(echo $1)

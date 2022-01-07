@@ -121,7 +121,7 @@ test_connection() {
     status=$?
     if [ $status -eq 0 ]; then
       if [ $response_code -eq 200 ]; then
-        grep -q '{"Key": "output"}' /tmp/response.json
+        grep -q '{"Key":"output"}' /tmp/response.json
         test_response=$?
         if [ $test_response -eq 0 ]; then
           result=0
