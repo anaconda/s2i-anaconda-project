@@ -163,7 +163,8 @@ BOKEH_ALLOW_WS_ORIGIN=*
 the `s2i-anaconda-project` builder images provide three entrypoint scripts.
 
 * `/entrypoint.sh`:
-    * The default entrypoint that execs anaconda-project run
+    * The default entrypoint that execs `anaconda-project run <cmd>`, where `<cmd>` is the command chosen at build time
+      or runtime.
 * `/lambda-api.sh`:
     * A cURL-based Lambda runtime that can be used for any command that doesn't utilize the AWS lambda runtime packages.
       This entrypoint receives the event data from AWS and sends it to the command as the first argument
