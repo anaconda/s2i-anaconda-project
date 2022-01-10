@@ -47,3 +47,5 @@ find ./envs/* -follow -type f -name '*.js.map' -delete
 if find_js; then
   find ./envs/*/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete
 fi
+
+touch .assembled

@@ -1,0 +1,8 @@
+name: test-lambda
+
+packages:
+  - jq
+
+commands:
+  default:
+    unix: jq -ncM '$in | .Key = "output"' --argjson in

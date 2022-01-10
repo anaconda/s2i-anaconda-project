@@ -1,0 +1,11 @@
+name: test-lambda-py
+
+packages:
+  - python=3.8
+  - pip
+  - pip:
+      - awslambdaric
+
+commands:
+  default:
+    unix: python -m awslambdaric app.handler

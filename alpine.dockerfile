@@ -17,8 +17,7 @@ ENV PATH=/opt/conda/bin:$PATH
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV HOME=/opt/app-root/src
 ENV TZ=US/Central
-
-COPY ./etc/condarc /opt/conda/.condarc
+ENV PIP_NO_CACHE_DIR=1
 
 ### Set timezone
 RUN apk add --no-cache tzdata \
@@ -26,14 +25,21 @@ RUN apk add --no-cache tzdata \
     && echo ${TZ} > /etc/timezone
 
 ### Install and configure miniconda
-RUN apk add --no-cache --virtual wget tar bash \
+COPY ./etc/condarc /opt/conda/.condarc
+RUN apk add --no-cache --virtual wget tar bash curl \
     && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.sh -O miniconda.sh \
     && sh miniconda.sh -u -b -p /opt/conda \
     && rm -f miniconda.sh \
+    && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
     && conda install anaconda-project=0.10.0 anaconda-client conda-repo-cli conda-token tini --yes \
     && conda clean --all --yes \
-    && chmod -R 755 /opt/conda 
+    && chmod -R 755 /opt/conda
 
+### AWS Lambda Runtime Emulator
+ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /opt/aws/
+RUN chmod +x /opt/aws/aws-lambda-rie
+
+COPY ./entrypoints/ /
 COPY ./s2i/bin/ /usr/libexec/s2i
 
 RUN mkdir -p /opt/app-root && \
@@ -52,6 +58,6 @@ EXPOSE 8086
 
 WORKDIR $HOME
 
-ENTRYPOINT ["tini", "-g", "--"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["/usr/libexec/s2i/usage"]

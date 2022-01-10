@@ -1,0 +1,13 @@
+name: test-env-vars
+
+packages: []
+
+variables:
+  PROJECT_VAR:
+    default: "project_value"
+
+commands:
+  default:
+    unix: env | grep "_VAR" | sort | sed 's/$/\\n/g' | tr -d '\n'
+    variables:
+      CMD_VAR: "cmd_value"
