@@ -4,6 +4,10 @@ Build docker images from Anaconda Project directories.
 
 ## Usage
 
+As of version 0.10.0 of [Anaconda Project](https://anaconda-project.readthedocs.io/en/latest/index.html) you can build images from these builder images with the `anaconda-project dockerize` command. See [the docs](https://anaconda-project.readthedocs.io/en/latest/user-guide/tasks/docker-image.html) for more details.
+
+You also use `s2i build` directly as shown here.
+
 1. Install [source-to-image](https://github.com/openshift/source-to-image#installation)
 2. Optional: Clone this repo and build the base images
 ```
