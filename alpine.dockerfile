@@ -13,9 +13,11 @@ RUN UNAME_M="$(uname -m)" && \
     if [ "${UNAME_M}" = "x86_64" ]; then \
         ARCH="x86_64"; \
         GH_ACCT="sgerrand"; \
+        SUFFIX=""; \
     elif [ "${UNAME_M}" = "aarch64" ]; then \
         ARCH="arm64"; \
         GH_ACCT="ljfranklin"; \
+        SUFFIX="-${ARCH}"; \
     fi && \
     ALPINE_GLIBC_BASE_URL="https://github.com/${GH_ACCT}/alpine-pkg-glibc/releases/download" && \
     echo $ALPINE_GLIBC_BASE_URL && \
@@ -24,9 +26,9 @@ RUN UNAME_M="$(uname -m)" && \
     ALPINE_GLIBC_I18N_PACKAGE_FILENAME="glibc-i18n-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
     apk add -q --no-cache --virtual=.build-dependencies wget ca-certificates && \
     wget -q \
-        "$ALPINE_GLIBC_BASE_URL/${ALPINE_GLIBC_PACKAGE_VERSION}-${ARCH}/$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BASE_URL/${ALPINE_GLIBC_PACKAGE_VERSION}-${ARCH}/$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BASE_URL/${ALPINE_GLIBC_PACKAGE_VERSION}-${ARCH}/$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
+        "$ALPINE_GLIBC_BASE_URL/${ALPINE_GLIBC_PACKAGE_VERSION}${SUFFIX}/$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
+        "$ALPINE_GLIBC_BASE_URL/${ALPINE_GLIBC_PACKAGE_VERSION}${SUFFIX}/$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
+        "$ALPINE_GLIBC_BASE_URL/${ALPINE_GLIBC_PACKAGE_VERSION}${SUFFIX}/$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
     apk --allow-untrusted add -q --no-cache \
         "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
