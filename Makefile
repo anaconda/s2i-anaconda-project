@@ -1,7 +1,8 @@
 IMAGE_PREFIX = conda/s2i-anaconda-project
 BASE_IMAGES := $(basename $(wildcard *.dockerfile))
-PLATFORM ?= "local"
-TAG ?= "latest"
+PLATFORM ?= local
+TAG ?= latest
+_comma = ,
 
 ifeq ($(PLATFORM), "local")
 	DOCKER_BUILD=docker build
@@ -13,7 +14,7 @@ all: $(BASE_IMAGES)
 
 .PHONY: $(BASE_IMAGES)
 $(BASE_IMAGES):
-	$(DOCKER_BUILD) -t $(IMAGE_PREFIX)-$@:$(TAG) -f $@.dockerfile .
+	$(DOCKER_BUILD) $(foreach tag, $(subst $(_comma), ,$(TAG)), -t $(IMAGE_PREFIX)-$@:$(tag)) -f $@.dockerfile .
 
 TEST_IMAGES := $(patsubst %,test-%,$(BASE_IMAGES))
 test: $(TEST_IMAGES)
