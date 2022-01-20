@@ -10,10 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         base: [ubi7, ubi8, alpine]
-        platform: [linux/amd64, "linux/amd64,linux/arm64"]
-        exclude:
-          - base: ubi7
-            platform: "linux/amd64,linux/arm64"
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -31,4 +27,11 @@ jobs:
         run: |
           docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
           GIT_TAG=`git describe --tags --abbrev=0`
-          make ${{ matrix.base }} PLATFORM=${{ matrix.platform }} TAG=latest,$GIT_TAG
+
+          if [ ${{ matrix.base }} == ubi7 ]; then
+            PLATFORM=linux/amd64
+          else
+            PLATFORM=linux/amd64,linux/arm64
+          fi
+
+          make ${{ matrix.base }} PLATFORM=$PLATFORM TAG=latest,$GIT_TAG
