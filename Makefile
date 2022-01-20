@@ -4,7 +4,7 @@ PLATFORM ?= local
 TAG ?= latest
 _comma = ,
 
-ifeq ($(PLATFORM), "local")
+ifeq ($(PLATFORM), local)
 	DOCKER_BUILD=docker build
 else
 	DOCKER_BUILD=docker buildx build --platform $(PLATFORM) --push
