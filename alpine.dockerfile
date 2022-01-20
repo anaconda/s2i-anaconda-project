@@ -76,7 +76,7 @@ RUN apk add --no-cache tzdata \
 ### Install and configure miniconda
 COPY ./etc/condarc /opt/conda/.condarc
 RUN apk add --no-cache --virtual wget tar bash curl \
-    && UNAME_M="$(uname -m)" && \
+    && UNAME_M="$(uname -m)" \
     && wget "https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-${UNAME_M}.sh" -O miniconda.sh -q \
     && sh miniconda.sh -u -b -p /opt/conda \
     && rm -f miniconda.sh \
