@@ -2,11 +2,11 @@ FROM registry.access.redhat.com/ubi7/s2i-base
 
 LABEL maintainer="Anaconda, Inc."
 
-ENV CONDA_VERSION=4.9.2
-ENV ANACONDA_PROJECT_VERSION=0.10.0
+ARG CONDA_VERSION=py39_4.10.3
+ARG ANACONDA_PROJECT_VERSION=0.10.2
 
 LABEL io.k8s.description="Run Anaconda Project commands" \
-      io.k8s.display-name="Anaconda Project 0.10.0" \
+      io.k8s.display-name="Anaconda Project ${ANACONDA_PROJECT_VERSION}" \
       io.openshift.expose-services="8086:http" \
       io.openshift.tags="builder,anaconda-project,conda" 
 
@@ -22,12 +22,13 @@ RUN chmod +x /opt/aws/aws-lambda-rie
 
 ### Install and configure miniconda
 COPY ./etc/condarc /opt/conda/.condarc
-RUN yum install -y wget bzip2 \
-    && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.sh -O miniconda.sh \
+RUN yum install -y wget bzip2 curl \
+    && UNAME_M="$(uname -m)" \
+    && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-${UNAME_M}.sh -O miniconda.sh \
     && bash miniconda.sh -u -b -p /opt/conda \
     && rm -f miniconda.sh \
     && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
-    && conda install anaconda-project=0.10.0 anaconda-client conda-repo-cli conda-token tini --yes \
+    && conda install anaconda-project=${ANACONDA_PROJECT_VERSION} anaconda-client conda-repo-cli conda-token tini --yes \
     && conda clean --all --yes \
     && chmod -R 755 /opt/conda
 

@@ -3,6 +3,10 @@ name: test-lambda
 packages:
   - jq
 
+channels:
+  - defaults
+  - conda-forge
+
 commands:
   default:
     unix: jq -ncM '$in | .Key = "output"' --argjson in

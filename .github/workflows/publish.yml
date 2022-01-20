@@ -15,14 +15,23 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Builder image (${{ matrix.base }})
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Builder and push image (${{ matrix.base }})
         run: |
-          make ${{ matrix.base }}
-          docker image ls
-      - name: Push to Docker Hub (${{ matrix.base }})
-        run: |
-          GIT_TAG=`git describe --tags --abbrev=0`
           docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
-          docker tag conda/s2i-anaconda-project-${{ matrix.base }}:latest conda/s2i-anaconda-project-${{ matrix.base }}:$GIT_TAG
-          docker push conda/s2i-anaconda-project-${{ matrix.base }}:latest
-          docker push conda/s2i-anaconda-project-${{ matrix.base }}:$GIT_TAG
+          GIT_TAG=`git describe --tags --abbrev=0`
+
+          if [ ${{ matrix.base }} == ubi7 ]; then
+            PLATFORM=linux/amd64
+          else
+            PLATFORM=linux/amd64,linux/arm64
+          fi
+
+          make ${{ matrix.base }} PLATFORM=$PLATFORM TAG=latest,$GIT_TAG
