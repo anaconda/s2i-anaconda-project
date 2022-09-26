@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi8/s2i-base
 LABEL maintainer="Anaconda, Inc."
 
 ARG CONDA_VERSION=py39_4.10.3
-ARG ANACONDA_PROJECT_VERSION=0.10.2
+ARG ANACONDA_PROJECT_VERSION=0.11.1
 
 LABEL io.k8s.description="Run Anaconda Project commands" \
       io.k8s.display-name="Anaconda Project ${ANACONDA_PROJECT_VERSION}" \
